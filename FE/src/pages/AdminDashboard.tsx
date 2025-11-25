@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 
 import type { User, Letter } from '../types';
 
+import API_URL from '../config';
+
 export default function AdminDashboard() {
     const [users, setUsers] = useState<User[]>([]);
     const [newName, setNewName] = useState('');
@@ -21,7 +23,7 @@ export default function AdminDashboard() {
 
     const fetchUsers = async () => {
         try {
-            const res = await fetch('http://localhost:3000/users', {
+            const res = await fetch(`${API_URL}/users`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (res.ok) {
@@ -36,7 +38,7 @@ export default function AdminDashboard() {
     const handleCreateUser = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await fetch('http://localhost:3000/users', {
+            const res = await fetch(`${API_URL}/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -72,7 +74,7 @@ export default function AdminDashboard() {
         }
 
         try {
-            const res = await fetch('http://localhost:3000/letters', {
+            const res = await fetch(`${API_URL}/letters`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -93,7 +95,7 @@ export default function AdminDashboard() {
 
     const fetchUserLetters = async (userId: string) => {
         try {
-            const res = await fetch(`http://localhost:3000/letters/${userId}`, {
+            const res = await fetch(`${API_URL}/letters/${userId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (res.ok) {
@@ -196,9 +198,9 @@ export default function AdminDashboard() {
                                                 {letter.media.map((url, idx) => (
                                                     <div key={idx} style={{ border: '1px solid #ddd', padding: '5px' }}>
                                                         {url.match(/\.(mp4|webm)$/i) ? (
-                                                            <video src={`http://localhost:3000${url}`} controls style={{ maxWidth: '200px', maxHeight: '200px', display: 'block' }} />
+                                                            <video src={`${API_URL}${url}`} controls style={{ maxWidth: '200px', maxHeight: '200px', display: 'block' }} />
                                                         ) : (
-                                                            <img src={`http://localhost:3000${url}`} alt={`attachment-${idx}`} style={{ maxWidth: '200px', maxHeight: '200px', display: 'block' }} />
+                                                            <img src={`${API_URL}${url}`} alt={`attachment-${idx}`} style={{ maxWidth: '200px', maxHeight: '200px', display: 'block' }} />
                                                         )}
                                                     </div>
                                                 ))}
