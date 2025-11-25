@@ -40,8 +40,31 @@ const getLettersByUser = async (req: Request, res: Response) => {
     }
 };
 
+const deleteLetter = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        await letterService.deleteLetter(id);
+        res.status(200).json({ message: 'Letter deleted' });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const updateLetter = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { content } = req.body;
+        const updatedLetter = await letterService.updateLetter(id, content);
+        res.status(200).json(updatedLetter);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export default {
     createLetter,
     getMyLetters,
-    getLettersByUser
+    getLettersByUser,
+    deleteLetter,
+    updateLetter
 };

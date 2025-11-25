@@ -23,5 +23,7 @@ router.post('/', authMiddleware.verifyToken, authMiddleware.isAdmin, upload.arra
 // User gets their own letters
 router.get('/', authMiddleware.verifyToken, letterController.getMyLetters);
 router.get('/:userId', authMiddleware.verifyToken, authMiddleware.isAdmin, letterController.getLettersByUser);
+router.delete('/:id', authMiddleware.verifyToken, authMiddleware.isAdmin, letterController.deleteLetter);
+router.put('/:id', authMiddleware.verifyToken, authMiddleware.isAdmin, letterController.updateLetter);
 
 export default router;

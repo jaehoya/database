@@ -23,7 +23,30 @@ const getAllUsers = async (req: Request, res: Response) => {
     }
 };
 
+const deleteUser = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        await userService.deleteUser(id);
+        res.status(200).json({ message: 'User deleted' });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const updateUser = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const updateData = req.body;
+        const updatedUser = await userService.updateUser(id, updateData);
+        res.status(200).json(updatedUser);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export default {
     createUser,
-    getAllUsers
+    getAllUsers,
+    deleteUser,
+    updateUser
 };

@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 db.connectDB();
 
 // Use reply routes (assuming app is an Express app instance)
-app.use('/api/replies', replyRoutes);
+app.use('/replies', replyRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

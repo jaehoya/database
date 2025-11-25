@@ -125,9 +125,84 @@ export default function AdminDashboard() {
         }
     };
 
+    const handleDeleteLetter = async (letterId: string) => {
+        if (!window.confirm('정말 이 편지를 삭제하시겠습니까?')) return;
+        try {
+            const res = await fetch(`${API_URL}/letters/${letterId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                alert('편지가 삭제되었습니다.');
+                if (selectedUser) fetchUserLetters(selectedUser._id);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const handleUpdateLetter = async (letterId: string, currentContent: string) => {
+        const newContent = window.prompt('편지 내용을 수정하세요:', currentContent);
+        if (newContent === null) return;
+        try {
+            const res = await fetch(`${API_URL}/letters/${letterId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ content: newContent })
+            });
+            if (res.ok) {
+                alert('수정되었습니다.');
+                if (selectedUser) fetchUserLetters(selectedUser._id);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const handleLogout = () => {
         localStorage.removeItem('token');
         window.location.reload();
+    };
+
+    const handleDeleteUser = async (userId: string) => {
+        if (!window.confirm('정말 이 유저를 삭제하시겠습니까?')) return;
+        try {
+            const res = await fetch(`${API_URL}/users/${userId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                alert('유저가 삭제되었습니다.');
+                fetchUsers();
+                if (selectedUser?._id === userId) setSelectedUser(null);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const handleUpdateUserLastChat = async (userId: string, currentLastChat: string) => {
+        const newLastChat = window.prompt('새로운 마지막 카톡 내용을 입력하세요:', currentLastChat);
+        if (newLastChat === null) return;
+        try {
+            const res = await fetch(`${API_URL}/users/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ lastChat: newLastChat })
+            });
+            if (res.ok) {
+                alert('수정되었습니다.');
+                fetchUsers();
+            }
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (
@@ -158,7 +233,9 @@ export default function AdminDashboard() {
                                 <span>{user.name} <small style={{ color: '#888' }}>({user.lastChat})</small></span>
                                 <div>
                                     <button onClick={() => { setSelectedUser(user); setViewingLetters(false); }} style={{ padding: '5px 10px', fontSize: '0.9rem', marginRight: '5px' }}>편지 쓰기</button>
-                                    <button onClick={() => { setSelectedUser(user); fetchUserLetters(user._id); }} style={{ padding: '5px 10px', fontSize: '0.9rem', backgroundColor: '#6d5a43' }}>보기</button>
+                                    <button onClick={() => { setSelectedUser(user); fetchUserLetters(user._id); }} style={{ padding: '5px 10px', fontSize: '0.9rem', backgroundColor: '#6d5a43', marginRight: '5px' }}>보기</button>
+                                    <button onClick={() => handleUpdateUserLastChat(user._id, user.lastChat)} style={{ padding: '5px 10px', fontSize: '0.9rem', backgroundColor: '#4CAF50', marginRight: '5px' }}>수정</button>
+                                    <button onClick={() => handleDeleteUser(user._id)} style={{ padding: '5px 10px', fontSize: '0.9rem', backgroundColor: '#f44336' }}>삭제</button>
                                 </div>
                             </li>
                         ))}
@@ -226,8 +303,12 @@ export default function AdminDashboard() {
                                                 ))}
                                             </div>
                                         )}
-                                        <div style={{ fontSize: '0.9rem', color: '#888', marginBottom: '5px' }}>
-                                            {new Date(letter.receivedAt || letter.createdAt).toLocaleDateString()}
+                                        <div style={{ fontSize: '0.9rem', color: '#888', marginBottom: '5px', display: 'flex', justifyContent: 'space-between' }}>
+                                            <span>{new Date(letter.receivedAt || letter.createdAt).toLocaleDateString()}</span>
+                                            <div>
+                                                <button onClick={() => handleUpdateLetter(letter._id, letter.content)} style={{ padding: '2px 5px', fontSize: '0.8rem', backgroundColor: '#4CAF50', marginRight: '5px', color: 'white', border: 'none', borderRadius: '3px' }}>수정</button>
+                                                <button onClick={() => handleDeleteLetter(letter._id)} style={{ padding: '2px 5px', fontSize: '0.8rem', backgroundColor: '#f44336', color: 'white', border: 'none', borderRadius: '3px' }}>삭제</button>
+                                            </div>
                                         </div>
                                         <div style={{ whiteSpace: 'pre-wrap' }}>{letter.content}</div>
                                     </li>

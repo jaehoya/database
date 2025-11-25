@@ -12,10 +12,20 @@ const createLetter = async (userId: string, content: string, media: string[], re
 };
 
 const getLettersByUserId = async (userId: string): Promise<ILetter[]> => {
-    return await Letter.find({ userId });
+    return await Letter.find({ userId }).sort({ receivedAt: -1, createdAt: -1 });
+};
+
+const deleteLetter = async (id: string): Promise<ILetter | null> => {
+    return await Letter.findByIdAndDelete(id);
+};
+
+const updateLetter = async (id: string, content: string): Promise<ILetter | null> => {
+    return await Letter.findByIdAndUpdate(id, { content }, { new: true });
 };
 
 export default {
     createLetter,
-    getLettersByUserId
+    getLettersByUserId,
+    deleteLetter,
+    updateLetter
 };
