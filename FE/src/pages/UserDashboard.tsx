@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-
 import type { Letter } from '../types';
+import API_URL from '../config';
 
 export default function UserDashboard() {
     const [letters, setLetters] = useState<Letter[]>([]);
@@ -9,7 +9,7 @@ export default function UserDashboard() {
     useEffect(() => {
         const fetchLetters = async () => {
             try {
-                const res = await fetch('http://localhost:3000/letters', {
+                const res = await fetch(`${API_URL}/letters`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
@@ -47,9 +47,9 @@ export default function UserDashboard() {
                                 {letter.media.map((url, index) => (
                                     <div key={index} style={{ border: '5px solid white', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
                                         {url.match(/\.(mp4|webm)$/i) ? (
-                                            <video src={`http://localhost:3000${url}`} controls style={{ maxWidth: '100%', maxHeight: '300px', display: 'block' }} />
+                                            <video src={`${API_URL}${url}`} controls style={{ maxWidth: '100%', maxHeight: '300px', display: 'block' }} />
                                         ) : (
-                                            <img src={`http://localhost:3000${url}`} alt="attachment" style={{ maxWidth: '100%', maxHeight: '300px', display: 'block' }} />
+                                            <img src={`${API_URL}${url}`} alt="attachment" style={{ maxWidth: '100%', maxHeight: '300px', display: 'block' }} />
                                         )}
                                     </div>
                                 ))}
