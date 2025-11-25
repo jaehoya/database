@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { Letter } from '../types';
 import API_URL from '../config';
+import MediaCarousel from '../components/MediaCarousel';
 
 export default function UserDashboard() {
     const [letters, setLetters] = useState<Letter[]>([]);
@@ -70,17 +71,7 @@ export default function UserDashboard() {
                 letters.map(letter => (
                     <div key={letter._id} className="paper" style={{ marginBottom: '40px' }}>
                         {letter.media.length > 0 && (
-                            <div style={{ marginBottom: '30px', display: 'flex', gap: '15px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                                {letter.media.map((url, index) => (
-                                    <div key={index} style={{ border: '5px solid white', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
-                                        {url.match(/\.(mp4|webm)$/i) ? (
-                                            <video src={`${API_URL}${url}`} controls style={{ maxWidth: '100%', maxHeight: '300px', display: 'block' }} />
-                                        ) : (
-                                            <img src={`${API_URL}${url}`} alt="attachment" style={{ maxWidth: '100%', maxHeight: '300px', display: 'block' }} />
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
+                            <MediaCarousel media={letter.media} />
                         )}
 
                         <div style={{ minHeight: '120px', lineHeight: '30px', whiteSpace: 'pre-wrap', fontSize: '1em', color: '#333' }}>

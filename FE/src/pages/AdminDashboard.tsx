@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import type { User, Letter } from '../types';
+import type { User, Letter, Reply } from '../types';
 
 import API_URL from '../config';
 
@@ -14,12 +14,29 @@ export default function AdminDashboard() {
     const [receivedAt, setReceivedAt] = useState('');
     const [userLetters, setUserLetters] = useState<Letter[]>([]);
     const [viewingLetters, setViewingLetters] = useState(false);
+    const [replies, setReplies] = useState<Reply[]>([]);
+    const [viewingReplies, setViewingReplies] = useState(false);
 
     const token = localStorage.getItem('token');
 
     useEffect(() => {
         fetchUsers();
     }, []);
+
+    const fetchReplies = async () => {
+        try {
+            const res = await fetch(`${API_URL}/replies`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setReplies(data);
+                setViewingReplies(true);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
     const fetchUsers = async () => {
         try {
@@ -114,10 +131,13 @@ export default function AdminDashboard() {
     };
 
     return (
-        <div style={{ padding: '20px', width: '100%', maxWidth: '1000px' }}>
+        <div style={{ padding: '20px', width: '90%', maxWidth: '1000px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
                 <h1 style={{ color: '#5d4037', margin: 0 }}>편지쓰기</h1>
-                <button onClick={handleLogout} style={{ backgroundColor: '#aaa', fontSize: '0.9rem' }}>로그아웃</button>
+                <div>
+                    <button onClick={fetchReplies} style={{ backgroundColor: '#6d5a43', fontSize: '0.9rem', marginRight: '10px' }}>답장 보기</button>
+                    <button onClick={handleLogout} style={{ backgroundColor: '#aaa', fontSize: '0.9rem' }}>로그아웃</button>
+                </div>
             </div>
 
             <div className="paper">
@@ -217,6 +237,32 @@ export default function AdminDashboard() {
                     </div>
                 )}
             </div>
+
+            {viewingReplies && (
+                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
+                    <div className="paper" style={{ width: '90%', maxWidth: '600px', maxHeight: '80vh', overflowY: 'auto', position: 'relative' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #ddd', paddingBottom: '10px' }}>
+                            <h2 style={{ margin: 0 }}>받은 답장 목록</h2>
+                            <button onClick={() => setViewingReplies(false)} style={{ padding: '5px 10px', fontSize: '0.9rem', backgroundColor: '#aaa' }}>닫기</button>
+                        </div>
+                        {replies.length === 0 ? (
+                            <p>받은 답장이 없습니다.</p>
+                        ) : (
+                            <ul style={{ listStyle: 'none', padding: 0 }}>
+                                {replies.map(reply => (
+                                    <li key={reply._id} style={{ marginBottom: '20px', borderBottom: '1px dashed #eee', paddingBottom: '20px' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                                            <span style={{ fontWeight: 'bold' }}>{reply.userId?.name || '알 수 없음'}</span>
+                                            <span style={{ fontSize: '0.9rem', color: '#888' }}>{new Date(reply.createdAt).toLocaleDateString()}</span>
+                                        </div>
+                                        <div style={{ whiteSpace: 'pre-wrap', color: '#333' }}>{reply.content}</div>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

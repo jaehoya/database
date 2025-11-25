@@ -3,7 +3,8 @@ import Reply from '../models/Reply';
 
 export const createReply = async (req: Request, res: Response) => {
     try {
-        const { userId, content } = req.body;
+        const { content } = req.body;
+        const userId = req.user.id;
         const newReply = new Reply({ userId, content });
         await newReply.save();
         res.status(201).json(newReply);

@@ -11,3 +11,10 @@ export interface Letter {
     receivedAt: string;
     createdAt: string;
 }
+
+export interface Reply {
+    _id: string;
+    userId: User;
+    content: string;
+    createdAt: string;
+}
