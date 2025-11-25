@@ -56,7 +56,7 @@ export default function UserDashboard() {
                             </div>
                         )}
 
-                        <div style={{ minHeight: '200px', lineHeight: '30px', whiteSpace: 'pre-wrap', fontSize: '1.2em', color: '#333' }}>
+                        <div style={{ minHeight: '120px', lineHeight: '30px', whiteSpace: 'pre-wrap', fontSize: '1em', color: '#333' }}>
                             {letter.content}
                         </div>
 
