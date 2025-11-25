@@ -29,7 +29,7 @@ export default function UserDashboard() {
     };
 
     return (
-        <div style={{ padding: '20px', width: '100%', maxWidth: '800px', margin: '0 auto' }}>
+        <div style={{ padding: '20px', width: '100%', maxWidth: '600px', margin: '0 auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
                 <h1 style={{ color: '#5d4037', margin: 0 }}>내 편지함</h1>
                 <button onClick={handleLogout} style={{ backgroundColor: '#aaa', fontSize: '0.9rem' }}>로그아웃</button>

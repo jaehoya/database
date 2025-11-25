@@ -11,17 +11,6 @@ const connectDB = async (): Promise<void> => {
     }
 };
 
-const seedAdmin = async (): Promise<void> => {
-    const admin = await User.findOne({ isAdmin: true });
-    if (!admin) {
-        await User.create({
-            name: '이재호',
-            lastChat: '수고했다',
-            isAdmin: true
-        });
-        console.log('Admin user seeded');
-    }
-};
 
 export default {
     connectDB
