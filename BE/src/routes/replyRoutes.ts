@@ -1,10 +1,10 @@
 import express from 'express';
 import { createReply, getReplies } from '../controllers/replyController';
-import { isAdmin } from '../middlewares/authMiddleware';
+import authMiddleware from '../middlewares/authMiddleware';
 
 const router = express.Router();
 
-router.post('/', createReply);
-router.get('/', isAdmin, getReplies);
+router.post('/', authMiddleware.verifyToken, createReply);
+router.get('/', authMiddleware.verifyToken, authMiddleware.isAdmin, getReplies);
 
 export default router;
