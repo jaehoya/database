@@ -1,6 +1,6 @@
 import { useState } from "react";
 import API_URL from '../config';
-import logo from '../assets/logo.JPG';
+
 
 interface LoginProps {
     onLogin: (isAdmin: boolean) => void;
@@ -44,8 +44,7 @@ export default function Login({ onLogin }: LoginProps) {
     return (
         <div className="paper">
             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-                <img src={logo} alt="Logo" style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover', marginBottom: '10px' }} />
-                <h1 style={{ color: '#5d4037', margin: 0 }}>메시지</h1>
+                <h1 style={{ color: '#5d4037', margin: 0 }}>편지함</h1>
             </div>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <input type="text" placeholder="이름" value={name}
