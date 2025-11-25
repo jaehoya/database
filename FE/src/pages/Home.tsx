@@ -11,7 +11,7 @@ export default function Home() {
     };
 
     return (
-        <div>
+        <div style={{ width: '100%' }}>
             {view === 'login' && <Login onLogin={handleLogin} />}
             {view === 'admin' && <AdminDashboard />}
             {view === 'user' && <UserDashboard />}

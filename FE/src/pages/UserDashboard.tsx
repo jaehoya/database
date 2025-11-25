@@ -29,9 +29,9 @@ export default function UserDashboard() {
     };
 
     return (
-        <div style={{ padding: '10px', width: '100%', maxWidth: '600px', margin: '0 auto' }}>
+        <div style={{ padding: '10px 15px', width: '90%', maxWidth: '600px', margin: '0 auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
-                <h1 style={{ color: '#5d4037', margin: 0 }}>from. 재호</h1>
+                <h1 style={{ color: '#5d4037', margin: 0, fontSize: '1.5rem' }}>from. 재호</h1>
                 <button onClick={handleLogout} style={{ backgroundColor: '#aaa', fontSize: '0.9rem' }}>편지함 닫기</button>
             </div>
 
