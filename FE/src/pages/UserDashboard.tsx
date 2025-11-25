@@ -4,6 +4,7 @@ import API_URL from '../config';
 
 export default function UserDashboard() {
     const [letters, setLetters] = useState<Letter[]>([]);
+    const [replyContent, setReplyContent] = useState('');
     const token = localStorage.getItem('token');
 
     useEffect(() => {
@@ -26,6 +27,32 @@ export default function UserDashboard() {
     const handleLogout = () => {
         localStorage.removeItem('token');
         window.location.reload();
+    };
+
+    const handleReplySubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!replyContent.trim()) return;
+
+        try {
+            const res = await fetch(`${API_URL}/replies`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ content: replyContent })
+            });
+
+            if (res.ok) {
+                alert('답장이 전송되었습니다!');
+                setReplyContent('');
+            } else {
+                alert('답장 전송 실패');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('오류 발생');
+        }
     };
 
     return (
@@ -66,6 +93,19 @@ export default function UserDashboard() {
                     </div>
                 ))
             )}
+
+            <div className="paper" style={{ marginTop: '60px', borderTop: '2px dashed #ccc', paddingTop: '40px' }}>
+                <h2 style={{ color: '#5d4037', fontSize: '1.2rem', marginBottom: '20px' }}>답장 쓰기</h2>
+                <form onSubmit={handleReplySubmit}>
+                    <textarea
+                        value={replyContent}
+                        onChange={(e) => setReplyContent(e.target.value)}
+                        placeholder="하고 싶은 말을 적어주세요..."
+                        style={{ width: '100%', height: '150px', padding: '10px', marginBottom: '10px', border: '1px solid #ddd', borderRadius: '4px', resize: 'vertical' }}
+                    />
+                    <button type="submit" style={{ width: '100%' }}>보내기</button>
+                </form>
+            </div>
         </div>
     );
 }
