@@ -26,7 +26,7 @@ export default function Login({ onLogin }: LoginProps) {
                 const data = await response.json();
                 localStorage.setItem('token', data.token);
                 console.log('Login successful, token stored:', data.token);
-                alert('로그인 성공!');
+                // alert('로그인 성공!'); // Removed as requested
                 onLogin(data.isAdmin);
             } else {
                 console.error('Login failed');
